@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="9.3.2">
+<eagle version="9.2.2">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -5499,6 +5499,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <part name="H4" library="SparkFun-Hardware" deviceset="STAND-OFF" device="TIGHT"/>
 <part name="GND15" library="SparkFun-PowerSymbols" deviceset="GND" device=""/>
 <part name="J8" library="SparkFun-Connectors" deviceset="CONN_02" device="" value="ST-LINK"/>
+<part name="J9" library="SparkFun-Connectors" deviceset="CONN_04" device="PTH" value="additional I2C bus"/>
 </parts>
 <sheets>
 <sheet>
@@ -5523,9 +5524,9 @@ Dimensions: 3.325 inch * 1.3 inch</text>
 <attribute name="NAME" x="265.684" y="162.56" size="1.778" layer="95" rot="R90"/>
 <attribute name="VALUE" x="302.26" y="177.8" size="1.778" layer="96"/>
 </instance>
-<instance part="J1" gate="J1" x="342.9" y="134.62" smashed="yes" rot="R90">
-<attribute name="VALUE" x="357.886" y="127" size="1.778" layer="96" font="vector" rot="R180"/>
-<attribute name="NAME" x="334.772" y="132.08" size="1.778" layer="95" font="vector" rot="R180"/>
+<instance part="J1" gate="J1" x="342.9" y="124.46" smashed="yes" rot="R90">
+<attribute name="VALUE" x="357.886" y="116.84" size="1.778" layer="96" font="vector" rot="R180"/>
+<attribute name="NAME" x="334.772" y="121.92" size="1.778" layer="95" font="vector" rot="R180"/>
 </instance>
 <instance part="J2" gate="G$1" x="251.46" y="137.16" smashed="yes">
 <attribute name="VALUE" x="246.38" y="127.254" size="1.778" layer="96" font="vector"/>
@@ -5538,8 +5539,8 @@ Dimensions: 3.325 inch * 1.3 inch</text>
 <attribute name="NAME" x="365.76" y="217.932" size="1.778" layer="95" font="vector" align="bottom-center"/>
 <attribute name="VALUE" x="365.76" y="213.868" size="1.778" layer="96" font="vector" align="top-center"/>
 </instance>
-<instance part="GND1" gate="1" x="358.14" y="134.62" smashed="yes">
-<attribute name="VALUE" x="358.14" y="134.366" size="1.778" layer="96" align="top-center"/>
+<instance part="GND1" gate="1" x="358.14" y="127" smashed="yes">
+<attribute name="VALUE" x="358.14" y="126.746" size="1.778" layer="96" align="top-center"/>
 </instance>
 <instance part="GND2" gate="1" x="261.62" y="119.38" smashed="yes">
 <attribute name="VALUE" x="261.62" y="119.126" size="1.778" layer="96" align="top-center"/>
@@ -5691,16 +5692,24 @@ Dimensions: 3.325 inch * 1.3 inch</text>
 <attribute name="VALUE" x="342.9" y="81.534" size="1.778" layer="96" font="vector" rot="MR0"/>
 <attribute name="NAME" x="342.9" y="91.948" size="1.778" layer="95" font="vector" rot="MR0"/>
 </instance>
+<instance part="J9" gate="J1" x="381" y="124.46" smashed="yes" rot="R90">
+<attribute name="VALUE" x="390.906" y="116.84" size="1.778" layer="96" font="vector" rot="R180"/>
+<attribute name="NAME" x="372.872" y="121.92" size="1.778" layer="95" font="vector" rot="R180"/>
+</instance>
 </instances>
 <busses>
 </busses>
 <nets>
 <net name="GND" class="0">
 <segment>
-<pinref part="J1" gate="J1" pin="1"/>
 <pinref part="GND1" gate="1" pin="GND"/>
-<wire x1="345.44" y1="139.7" x2="358.14" y2="139.7" width="0.1524" layer="91"/>
-<wire x1="358.14" y1="139.7" x2="358.14" y2="137.16" width="0.1524" layer="91"/>
+<wire x1="358.14" y1="132.08" x2="358.14" y2="129.54" width="0.1524" layer="91"/>
+<wire x1="358.14" y1="132.08" x2="383.54" y2="132.08" width="0.1524" layer="91"/>
+<pinref part="J9" gate="J1" pin="1"/>
+<wire x1="383.54" y1="132.08" x2="383.54" y2="129.54" width="0.1524" layer="91"/>
+<pinref part="J1" gate="J1" pin="1"/>
+<wire x1="345.44" y1="129.54" x2="345.44" y2="132.08" width="0.1524" layer="91"/>
+<wire x1="345.44" y1="132.08" x2="358.14" y2="132.08" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="J2" gate="G$1" pin="6"/>
@@ -5859,7 +5868,10 @@ Dimensions: 3.325 inch * 1.3 inch</text>
 <wire x1="342.9" y1="157.48" x2="342.9" y2="147.32" width="0.1524" layer="91"/>
 <wire x1="342.9" y1="147.32" x2="340.36" y2="147.32" width="0.1524" layer="91"/>
 <pinref part="J1" gate="J1" pin="3"/>
-<wire x1="340.36" y1="147.32" x2="340.36" y2="139.7" width="0.1524" layer="91"/>
+<wire x1="340.36" y1="147.32" x2="340.36" y2="129.54" width="0.1524" layer="91"/>
+<wire x1="342.9" y1="147.32" x2="378.46" y2="147.32" width="0.1524" layer="91"/>
+<pinref part="J9" gate="J1" pin="3"/>
+<wire x1="378.46" y1="147.32" x2="378.46" y2="129.54" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="I2C_SCL" class="0">
@@ -5867,7 +5879,11 @@ Dimensions: 3.325 inch * 1.3 inch</text>
 <pinref part="U1" gate="G$1" pin="PB_6"/>
 <label x="337.82" y="160.02" size="1.778" layer="95" rot="MR270"/>
 <pinref part="J1" gate="J1" pin="4"/>
-<wire x1="337.82" y1="157.48" x2="337.82" y2="139.7" width="0.1524" layer="91"/>
+<wire x1="337.82" y1="157.48" x2="337.82" y2="137.16" width="0.1524" layer="91"/>
+<pinref part="J9" gate="J1" pin="4"/>
+<wire x1="337.82" y1="137.16" x2="337.82" y2="129.54" width="0.1524" layer="91"/>
+<wire x1="337.82" y1="137.16" x2="375.92" y2="137.16" width="0.1524" layer="91"/>
+<wire x1="375.92" y1="137.16" x2="375.92" y2="129.54" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="SPI2_NSS/CS" class="0">
@@ -6038,9 +6054,13 @@ Dimensions: 3.325 inch * 1.3 inch</text>
 </segment>
 <segment>
 <pinref part="J1" gate="J1" pin="2"/>
-<wire x1="342.9" y1="139.7" x2="342.9" y2="144.78" width="0.1524" layer="91"/>
+<wire x1="342.9" y1="129.54" x2="342.9" y2="142.24" width="0.1524" layer="91"/>
+<wire x1="342.9" y1="142.24" x2="342.9" y2="144.78" width="0.1524" layer="91"/>
 <wire x1="342.9" y1="144.78" x2="345.44" y2="144.78" width="0.1524" layer="91"/>
 <label x="345.44" y="144.78" size="1.778" layer="95" xref="yes"/>
+<wire x1="342.9" y1="142.24" x2="381" y2="142.24" width="0.1524" layer="91"/>
+<pinref part="J9" gate="J1" pin="2"/>
+<wire x1="381" y1="142.24" x2="381" y2="129.54" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="J3" gate="G$1" pin="8"/>
