@@ -31,6 +31,7 @@ void Eink_Reset() {
 void Eink_Sleep() {
     Eink_SendCommand(DEEP_SLEEP_MODE);
     Eink_WaitUntilIdle();
+    GPIO_ResetBits(GPIOA, RST_PIN);
 }
 
 
@@ -332,3 +333,10 @@ void Eink_SetAndDisplay() {
 	Eink_SetFrameMemory(image_buff);
 	Eink_DisplayFrame();
 }
+
+void Eink_WakeDisplaySleep(){
+	Eink_Reset();
+	Eink_SetAndDisplay();
+	Eink_Sleep();
+}
+

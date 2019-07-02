@@ -49,6 +49,7 @@ void Eink_Standby(void);
 void Eink_ClearFrameMemory(uint8_t color);
 void Eink_DisplayFrame(void);
 void Eink_SetAndDisplay(void);
+void Eink_WakeDisplaySleep(void);
 
 void Eink_demo(void);
 

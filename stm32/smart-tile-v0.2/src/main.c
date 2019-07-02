@@ -1,4 +1,4 @@
-#include "main.h"
+	#include "main.h"
 #include "wkup.h"
 #include "delay.h"
 #include "usart.h"
@@ -68,7 +68,7 @@ void Eink_Display_Depth(float depth) {
 	ClearBuffer();
 	sprintf(depth_str, "%2d.%02d", dig, frac);
 	DrawStringAt(0, 25, depth_str, &Font24, 3.5, 4, 1);
-	Eink_SetAndDisplay();
+	Eink_WakeDisplaySleep();
 }
 
 void Eink_Display_Debug(float pressure, float depth, float battery) {
@@ -97,7 +97,7 @@ void einkUserLogic(float pressure, float depth, float battery) {
 		// DrawStringAt(0, 70, line2, &Font24, 1, 1);
 		// sprintf(line, "Vbatt %.4fV", battery);
 		//DrawStringAt(0, 100, line, &Font24, 1, 1);
-		Eink_SetAndDisplay();
+		Eink_WakeDisplaySleep();
 	}
 	else {
 		Eink_Display_Depth(depth);
