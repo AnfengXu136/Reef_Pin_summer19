@@ -11,7 +11,7 @@ void ADC1_Init()
 	
 	// Step 1: Initialize ADC1
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1, ENABLE);
-	ADC_InitStruct.ADC_ContinuousConvMode = DISABLE;
+	ADC_InitStruct.ADC_ContinuousConvMode = ENABLE;
 	ADC_InitStruct.ADC_DataAlign = ADC_DataAlign_Right;
 	ADC_InitStruct.ADC_ExternalTrigConv = DISABLE;
 	ADC_InitStruct.ADC_ExternalTrigConv = ADC_ExternalTrigConv_None;

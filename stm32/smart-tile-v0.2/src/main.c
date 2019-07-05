@@ -110,7 +110,7 @@ int main(void)
 	int cnt_100ms = 0;
 	
 	// sensor data
-	float pressure = -1.11, depth = -1.11, battery = -1.11;
+	float pressure = -1.11, depth = -1.11, battery = 0;
 	
 	// initialization
 	deviceSetup();
@@ -120,7 +120,12 @@ int main(void)
 		// update data
 		if(!(cnt_100ms % PERIOD_LED)) Toggle_LED_Green();
 		if(!(cnt_100ms % PERIOD_DEPTH)) ms5803_getDepthAndPressure(&depth, &pressure);
-		if(!(cnt_100ms % PERIOD_BATT)) battery = ADC1_ReadBattery();
+		//printf("%f\n", ADC1_ReadBattery());
+		battery += ADC1_ReadBattery();
+		if(!(cnt_100ms % PERIOD_BATT)){
+			battery /= PERIOD_BATT;
+			battery = ADC1_ReadBattery();
+		}
 		// transmit
 		if(!(cnt_100ms % PERIOD_PRINT_SENSOR)) printSensorData(pressure, depth, battery);
 		// display
@@ -133,6 +138,8 @@ int main(void)
 		if(!(cnt_100ms % PERIOD_EINK)) {
 			einkUserLogic(pressure, depth, battery);
 		}
+		// reset the battery
+		if(!(cnt_100ms % PERIOD_BATT)) battery = 0;
 		// prevent overflow
 		if(!(cnt_100ms % PERIOD_OVERALL)) cnt_100ms = 0;
 
