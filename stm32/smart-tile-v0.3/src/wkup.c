@@ -1,5 +1,6 @@
 #include "wkup.h"
 #include "delay.h"
+#include "usart.h"
 #include "stm32f10x_gpio.h"
 #include "stm32f10x_rcc.h"
 #include "stm32f10x_pwr.h"
@@ -18,6 +19,7 @@ void Sys_Standby(void);
 void Sys_Enter_Standby(void);
 void EXTI0_IRQHandler(void);
 uint8_t Check_WKUP(void);
+uint8_t Check_STANDBY();
 
 
 //Green LED indicates wakeup status. It holds green during Check_WKUP status. It blinks when application is running.
@@ -117,12 +119,37 @@ uint8_t Check_WKUP(void)
 	}
 }  
 
+//check if it is a real standby or noise
+uint8_t Check_STANDBY(void)
+{
+	uint8_t t=0;	//record time of pressing
+	Turn_On_LED_Green(); // turn on LED green as indicator
+	while(1)
+	{
+		if(!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_0))
+		{
+			t++;
+			DelayMs(20);
+			if(t>=100)		//press time is enough
+			{
+				//LED0=0;
+				return 1;
+			}
+		}else
+		{
+			//LED0=1;
+			return 0;
+		}
+	}
+}
+
+
 
 //PA0 interrupt
 void EXTI0_IRQHandler(void)
 { 		    		    				     		    
 	if(DEVICE_ON) {
-		if(Check_WKUP()) { //check if it is a real turn off
+		if(Check_STANDBY()) { //check if it is a real turn off
 			DEVICE_ON = 0;
 			Sys_Enter_Standby();
 		}
@@ -146,10 +173,10 @@ void WKUP_Init(void)
 	GPIO_EXTILineConfig(GPIO_PortSourceGPIOA, GPIO_PinSource0);	
  
 	//initialize external interrupt
-  EXTI_InitStructure.EXTI_Line = EXTI_Line0;	
+    EXTI_InitStructure.EXTI_Line = EXTI_Line0;
 	EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;			
-	EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising; //trigger at rising edge
-  EXTI_InitStructure.EXTI_LineCmd = ENABLE;
+	EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising_Falling; //trigger at rising edge
+    EXTI_InitStructure.EXTI_LineCmd = ENABLE;
 	EXTI_Init(&EXTI_InitStructure);	
  
 	// Set interrupt priority group
@@ -162,7 +189,8 @@ void WKUP_Init(void)
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE; 
 	NVIC_Init(&NVIC_InitStructure);
  
-	if(Check_WKUP()==0) Sys_Standby(); //if not press 2s, still standby
+//	if(Check_WKUP()==0)  Sys_Standby(); //if not press 2s, still standby
+	if(!Check_WKUP()) Sys_Standby();
 	DEVICE_ON = 1;
-		
+
 }
