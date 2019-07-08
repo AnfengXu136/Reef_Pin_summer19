@@ -27,7 +27,10 @@ void deviceSetup() {
 	Init_LED_Green();
 	WKUP_Init();
 	Turn_On_Sensor_Power();
+	Init_Check_Status();
 	
+	int test = GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_4);
+
 	// initialize peripherals
 	USART1_Init();
 	printf("##################\n");
@@ -44,7 +47,7 @@ void deviceSetup() {
 	printf("Depth Sensor Initialized\n");
 	printf("------------------\n");
 	printf("All Peripherals Initialized\n");
-	
+	printf("Test: %d\n", test);
 	// register standby functions for peripherals
 	// Register_Standby_Funcs(Eink_Standby);
 	Register_Standby_Funcs(Turn_Off_Sensor_Power);

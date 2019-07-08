@@ -36,6 +36,22 @@ void Init_LED_Green() {
 	GPIO_Init(GPIOC, &GPIO_InitStructure);
 }
 
+void Init_Check_Status() {
+	GPIO_InitTypeDef GPIO_InitStruct;
+
+	// Configure B4 as input with internal pull-up resistor
+	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_4;
+    GPIO_InitStruct.GPIO_Speed = GPIO_Speed_2MHz;
+    GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IPU;
+    GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+    // Configure B5 as input with internal pull-up resistor
+    GPIO_InitStruct.GPIO_Pin = GPIO_Pin_5;
+    GPIO_InitStruct.GPIO_Speed = GPIO_Speed_2MHz;
+    GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IPU;
+    GPIO_Init(GPIOB, &GPIO_InitStruct);
+}
+
 void Turn_On_LED_Green() {
 	// Reset bit will turn on LED (because the logic is interved)
 	GPIO_ResetBits(GPIOC, GPIO_Pin_13);

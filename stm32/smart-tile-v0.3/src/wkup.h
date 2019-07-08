@@ -7,6 +7,7 @@
 void Toggle_LED_Green(void);
 void Register_Standby_Funcs(void (*standby_func)(void));
 void Init_LED_Green(void);
+void Init_Check_Status(void);
 void WKUP_Init(void);
 
 #endif
