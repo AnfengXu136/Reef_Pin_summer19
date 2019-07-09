@@ -107,19 +107,14 @@ void einkUserLogic(float pressure, float depth, float battery) {
 	}
 }
 
-int main(void)
-{
+void underwater(void) {
 	// clock for tasks
 	int cnt_100ms = 0;
-	
+
 	// sensor data
 	float pressure = -1.11, depth = -1.11, battery = 0;
-	
-	// initialization
-	deviceSetup();
 
-	while (1)
-	{
+	while (1) {
 		// update data
 		if(!(cnt_100ms % PERIOD_LED)) Toggle_LED_Green();
 		if(!(cnt_100ms % PERIOD_DEPTH)) ms5803_getDepthAndPressure(&depth, &pressure);
@@ -145,9 +140,69 @@ int main(void)
 		if(!(cnt_100ms % PERIOD_BATT)) battery = 0;
 		// prevent overflow
 		if(!(cnt_100ms % PERIOD_OVERALL)) cnt_100ms = 0;
-
-		cnt_100ms++;
+			cnt_100ms++;
 		DelayMs(100);
+	}
+}
+
+void charging(void) {
+	// clock for tasks
+	int cnt_100ms = 0;
+
+	// sensor data
+	float pressure = -1.11, depth = -1.11, battery = 0;
+
+	while (1) {
+		// update data
+		if(!(cnt_100ms % PERIOD_LED)) Toggle_LED_Green();
+		if(!(cnt_100ms % PERIOD_DEPTH)) ms5803_getDepthAndPressure(&depth, &pressure);
+		//printf("%f\n", ADC1_ReadBattery());
+		battery += ADC1_ReadBattery();
+		if(!(cnt_100ms % PERIOD_BATT)){
+			battery /= PERIOD_BATT;
+			battery = ADC1_ReadBattery();
+		}
+		// transmit
+		if(!(cnt_100ms % PERIOD_PRINT_SENSOR)) printSensorData(pressure, depth, battery);
+		// display
+		if(cnt_100ms % PERIOD_EINK == PERIOD_EINK - 20) {
+			// 2s before display digits
+			// clear the screen to prevent from burning
+			// Eink_ClearFrameMemory(0xFF);
+			// Eink_DisplayFrame();
+		}
+		if(!(cnt_100ms % PERIOD_EINK)) {
+			einkUserLogic(pressure, depth, battery);
+		}
+		// reset the battery
+		if(!(cnt_100ms % PERIOD_BATT)) battery = 0;
+		// prevent overflow
+		if(!(cnt_100ms % PERIOD_OVERALL)) cnt_100ms = 0;
+			cnt_100ms++;
+		DelayMs(100);
+	}
+}
+
+int main(void)
+{
+	// initialization
+	deviceSetup();
+
+	while (1) {
+		printf("Water State: %d\n", GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_5));
+		printf("Charging State: %d\n", GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_4));
+
+		// under water state
+		if (GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_5)) {
+			printf("Under Water State\n");
+			underwater();
+		}
+		// charging state
+		else if (GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_4)) {
+			printf("Charging State\n");
+			charging();
+		}
+		DelayMs(1000);
 	}
 }
 
