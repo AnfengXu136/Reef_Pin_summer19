@@ -133,7 +133,7 @@ void EXTI0_IRQHandler(void)
 //initialize wakeup module
 void WKUP_Init(void)
 {	
-  GPIO_InitTypeDef GPIO_InitStructure;  		  
+    GPIO_InitTypeDef GPIO_InitStructure;
 	NVIC_InitTypeDef NVIC_InitStructure;
 	EXTI_InitTypeDef EXTI_InitStructure;
  
@@ -146,10 +146,10 @@ void WKUP_Init(void)
 	GPIO_EXTILineConfig(GPIO_PortSourceGPIOA, GPIO_PinSource0);	
  
 	//initialize external interrupt
-  EXTI_InitStructure.EXTI_Line = EXTI_Line0;	
+    EXTI_InitStructure.EXTI_Line = EXTI_Line0;
 	EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;			
 	EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising; //trigger at rising edge
-  EXTI_InitStructure.EXTI_LineCmd = ENABLE;
+    EXTI_InitStructure.EXTI_LineCmd = ENABLE;
 	EXTI_Init(&EXTI_InitStructure);	
  
 	// Set interrupt priority group
