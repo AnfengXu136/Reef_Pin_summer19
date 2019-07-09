@@ -87,6 +87,11 @@ void Eink_Display_Debug(float pressure, float depth, float battery) {
 	Eink_SetAndDisplay();
 }
 
+void Eink_Display_Charging(){
+	ClearBuffer();
+	DrawStringAt(10, 0, "Charging", &Font24, 2, 3, 1);
+	Eink_WakeDisplaySleep();
+}
 void einkUserLogic(float pressure, float depth, float battery) {
 	static uint8_t welcome_flag = 1;
 	if(welcome_flag) {
@@ -130,8 +135,7 @@ void underwater(void) {
 		if(cnt_100ms % PERIOD_EINK == PERIOD_EINK - 20) {
 			// 2s before display digits
 			// clear the screen to prevent from burning
-			// Eink_ClearFrameMemory(0xFF);
-			// Eink_DisplayFrame();
+			Eink_Clear();
 		}
 		if(!(cnt_100ms % PERIOD_EINK)) {
 			einkUserLogic(pressure, depth, battery);
@@ -155,7 +159,6 @@ void charging(void) {
 	while (1) {
 		// update data
 		if(!(cnt_100ms % PERIOD_LED)) Toggle_LED_Green();
-		if(!(cnt_100ms % PERIOD_DEPTH)) ms5803_getDepthAndPressure(&depth, &pressure);
 		//printf("%f\n", ADC1_ReadBattery());
 		battery += ADC1_ReadBattery();
 		if(!(cnt_100ms % PERIOD_BATT)){
@@ -163,16 +166,15 @@ void charging(void) {
 			battery = ADC1_ReadBattery();
 		}
 		// transmit
-		if(!(cnt_100ms % PERIOD_PRINT_SENSOR)) printSensorData(pressure, depth, battery);
+		if(!(cnt_100ms % PERIOD_PRINT_SENSOR)){}// printSensorData(pressure, depth, battery);
 		// display
 		if(cnt_100ms % PERIOD_EINK == PERIOD_EINK - 20) {
 			// 2s before display digits
 			// clear the screen to prevent from burning
-			// Eink_ClearFrameMemory(0xFF);
-			// Eink_DisplayFrame();
+			Eink_Clear();
 		}
 		if(!(cnt_100ms % PERIOD_EINK)) {
-			einkUserLogic(pressure, depth, battery);
+			Eink_Display_Charging();
 		}
 		// reset the battery
 		if(!(cnt_100ms % PERIOD_BATT)) battery = 0;
