@@ -27,6 +27,7 @@ void deviceSetup() {
 	Init_LED_Green();
 	WKUP_Init();
 	Turn_On_Sensor_Power();
+	//Turn_On_ZigBee_Power();
 	Init_Check_Status();
 	
 	int test = GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_4);
