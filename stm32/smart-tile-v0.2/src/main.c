@@ -109,6 +109,9 @@ int main(void)
 	// clock for tasks
 	int cnt_100ms = 0;
 	
+	// average depth
+	float avedepth = 0;
+
 	// sensor data
 	float pressure = -1.11, depth = -1.11, battery = 0;
 	
@@ -119,7 +122,10 @@ int main(void)
 	{
 		// update data
 		if(!(cnt_100ms % PERIOD_LED)) Toggle_LED_Green();
-		if(!(cnt_100ms % PERIOD_DEPTH)) ms5803_getDepthAndPressure(&depth, &pressure);
+		if(!(cnt_100ms % PERIOD_DEPTH)) {
+			ms5803_getDepthAndPressure(&depth, &pressure);
+			avedepth += depth;
+		}
 		//printf("%f\n", ADC1_ReadBattery());
 		battery += ADC1_ReadBattery();
 		if(!(cnt_100ms % PERIOD_BATT)){
@@ -136,7 +142,8 @@ int main(void)
 			// Eink_DisplayFrame();
 		}
 		if(!(cnt_100ms % PERIOD_EINK)) {
-			einkUserLogic(pressure, depth, battery);
+			einkUserLogic(pressure, avedepth / (PERIOD_EINK / PERIOD_DEPTH), battery);
+			avedepth = 0;
 		}
 		// reset the battery
 		if(!(cnt_100ms % PERIOD_BATT)) battery = 0;
