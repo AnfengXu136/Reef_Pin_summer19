@@ -185,7 +185,17 @@ void EXTI0_IRQHandler(void)
 	EXTI_ClearITPendingBit(EXTI_Line0); //clear interrupt
 } 
 
+void WKUP_Disable(void)
+{
+	EXTI_InitTypeDef EXTI_InitStructure;
+	// disable external interrupt
+	EXTI_InitStructure.EXTI_Line = EXTI_Line0;
+	EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
+	EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising_Falling; //trigger at rising edge
+    EXTI_InitStructure.EXTI_LineCmd = DISABLE;
+	EXTI_Init(&EXTI_InitStructure);
 
+}
 //initialize wakeup module
 void WKUP_Init(void)
 {	

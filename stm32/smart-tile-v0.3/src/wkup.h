@@ -10,5 +10,6 @@ void Init_LED_Green(void);
 void Init_Check_Status(void);
 void Init_Water_En(void);
 void WKUP_Init(void);
+void WKUP_Disable(void);
 
 #endif

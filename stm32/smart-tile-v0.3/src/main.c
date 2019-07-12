@@ -118,6 +118,9 @@ void underwater(void) {
 	// clock for tasks
 	int cnt_100ms = 0;
 
+	// disable interrupt
+	WKUP_Disable();
+
 	// sensor data
 	float pressure = -1.11, depth = -1.11, battery = 0;
 
