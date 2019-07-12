@@ -21,6 +21,9 @@ static uint8_t USART3_STATUS = 0;
 static uint8_t send_frame_buff[MAX_FRAME_LEN];
 static uint8_t recv_package_buff[MAX_PACKAGE_LEN];
 
+int numInterrupt = 0; // this variable is for debugging purpose
+char receive;
+
 // ====================== Handler =====================
 
 void echoHandler(char c) {
@@ -321,6 +324,8 @@ void USART3_IRQHandler()
 		if(recvByteHandler(c, recv_package_buff, &package_length)) {
 			parsePackage(recv_package_buff, package_length);
 		}
+		numInterrupt++;
+		receive = c;
 	}
 }
 

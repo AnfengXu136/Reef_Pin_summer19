@@ -27,8 +27,9 @@ void deviceSetup() {
 	Init_LED_Green();
 	WKUP_Init();
 	Turn_On_Sensor_Power();
-	//Turn_On_ZigBee_Power();
+	// Turn_On_ZigBee_Power();
 	Init_Check_Status();
+	Init_Water_En();
 	
 	int test = GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_4);
 
@@ -145,6 +146,8 @@ void underwater(void) {
 		if(!(cnt_100ms % PERIOD_BATT)) battery = 0;
 		// prevent overflow
 		if(!(cnt_100ms % PERIOD_OVERALL)) cnt_100ms = 0;
+
+		// TODO store data into SD card
 			cnt_100ms++;
 		DelayMs(100);
 	}
@@ -182,6 +185,8 @@ void charging(void) {
 		// prevent overflow
 		if(!(cnt_100ms % PERIOD_OVERALL)) cnt_100ms = 0;
 			cnt_100ms++;
+
+		// TODO sending data from SD card using protocol
 		DelayMs(100);
 	}
 }
@@ -190,6 +195,8 @@ int main(void)
 {
 	// initialization
 	deviceSetup();
+
+	RTC_Set(2019, 7, 11, 10, 5, 0);
 
 	while (1) {
 		printf("Water State: %d\n", GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_5));

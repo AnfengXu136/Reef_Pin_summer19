@@ -36,6 +36,8 @@ void Init_LED_Green() {
 	GPIO_Init(GPIOC, &GPIO_InitStructure);
 }
 
+// check whether the device is in water or charging
+// B4 is for charging, B5 is for water
 void Init_Check_Status() {
 	GPIO_InitTypeDef GPIO_InitStruct;
 
@@ -50,6 +52,16 @@ void Init_Check_Status() {
     GPIO_InitStruct.GPIO_Speed = GPIO_Speed_2MHz;
     GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IPU;
     GPIO_Init(GPIOB, &GPIO_InitStruct);
+}
+
+void Init_Water_En() {
+	GPIO_InitTypeDef GPIO_InitStruct;
+
+		// Configure B9 as input with internal pull-up resistor
+		GPIO_InitStruct.GPIO_Pin = GPIO_Pin_9;
+	    GPIO_InitStruct.GPIO_Speed = GPIO_Speed_2MHz;
+	    GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IPU;
+	    GPIO_Init(GPIOB, &GPIO_InitStruct);
 }
 
 void Turn_On_LED_Green() {
@@ -172,6 +184,7 @@ void EXTI0_IRQHandler(void)
 	}
 	EXTI_ClearITPendingBit(EXTI_Line0); //clear interrupt
 } 
+
 
 //initialize wakeup module
 void WKUP_Init(void)

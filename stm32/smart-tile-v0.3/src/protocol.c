@@ -21,6 +21,7 @@ uint8_t recvByteHandler(uint8_t byte, uint8_t *recv_package_buff, uint8_t *packa
 
 	switch(recv_state) {
 	case 0:
+		printf("We are in case 0\n");
 		if (recv_last_byte == PROT_FIRST_BYTE && byte == PROT_SECOND_BYTE) {
 			recv_state = 1;
 			recv_idx = 0;
@@ -31,9 +32,11 @@ uint8_t recvByteHandler(uint8_t byte, uint8_t *recv_package_buff, uint8_t *packa
 		}
 		break;
 	case 1:
+		printf("We are in case 1\n");
 		recv_state = 2;
 		recv_idx = 0;
 		recv_length = byte;
+		if(byte > 29 && byte < 40) recv_length = byte - 30;
 		recv_sum = byte;
 		if(byte == PROT_FIRST_BYTE) {
 			recv_ignore_flag = 1;
@@ -42,6 +45,7 @@ uint8_t recvByteHandler(uint8_t byte, uint8_t *recv_package_buff, uint8_t *packa
 		}
 		break;
 	case 2:
+		printf("We are in case 2\n");
 		if (recv_last_byte == PROT_FIRST_BYTE && byte == PROT_SECOND_BYTE) {
 			recv_state = 1;
 			recv_idx = 0;

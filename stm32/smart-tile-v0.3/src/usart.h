@@ -22,4 +22,7 @@ int fputc(int ch, FILE *f);
 
 int sendPackage(uint8_t *package, uint8_t package_length);
 
+extern int numInterrupt; // this is for debug
+extern char receive;
+
 #endif
