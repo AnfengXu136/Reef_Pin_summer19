@@ -104,7 +104,7 @@ uint8_t Check_WKUP(void)
 		{
 			t++;			
 			DelayMs(20);
-			if(t>=100)		//press time is enough
+			if(t>=50)		//press time is enough
 			{
 				//LED0=0;	 	
 				return 1; 	

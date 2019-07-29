@@ -1,4 +1,4 @@
-	#include "main.h"
+#include "main.h"
 #include "wkup.h"
 #include "delay.h"
 #include "usart.h"
@@ -92,7 +92,7 @@ void einkUserLogic(float pressure, float depth, float battery) {
 		ClearBuffer();
 		DrawStringAt(0, 10, "Smart Integrated Tile", &Font24, 0.8, 1, 1);
 		DrawStringAt(0, 50, "Version 0.2", &Font24, 0.8, 0.9, 1);
-		DrawStringAt(0, 90, "12/06/2019", &Font24, 0.8, 0.9, 1);
+		//DrawStringAt(0, 90, "12/06/2019", &Font24, 0.8, 0.9, 1);
 
 		// DrawStringAt(0, 70, line2, &Font24, 1, 1);
 		// sprintf(line, "Vbatt %.4fV", battery);
@@ -113,7 +113,7 @@ int main(void)
 	float avedepth = 0;
 
 	// sensor data
-	float pressure = -1.11, depth = -1.11, battery = 0;
+	float pressure = -1.11, depth =  1.23, battery = 0;
 	
 	// initialization
 	deviceSetup();
@@ -123,7 +123,7 @@ int main(void)
 		// update data
 		if(!(cnt_100ms % PERIOD_LED)) Toggle_LED_Green();
 		if(!(cnt_100ms % PERIOD_DEPTH)) {
-			ms5803_getDepthAndPressure(&depth, &pressure);
+      		ms5803_getDepthAndPressure(&depth, &pressure);
 			avedepth += depth;
 		}
 		//printf("%f\n", ADC1_ReadBattery());
@@ -135,11 +135,10 @@ int main(void)
 		// transmit
 		if(!(cnt_100ms % PERIOD_PRINT_SENSOR)) printSensorData(pressure, depth, battery);
 		// display
-		if(cnt_100ms % PERIOD_EINK == PERIOD_EINK - 20) {
+		if(cnt_100ms % PERIOD_EINK == PERIOD_EINK - 10) {
 			// 2s before display digits
 			// clear the screen to prevent from burning
-			// Eink_ClearFrameMemory(0xFF);
-			// Eink_DisplayFrame();
+			 Eink_Clear();
 		}
 		if(!(cnt_100ms % PERIOD_EINK)) {
 			einkUserLogic(pressure, avedepth / (PERIOD_EINK / PERIOD_DEPTH), battery);
