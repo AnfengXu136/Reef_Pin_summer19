@@ -67,22 +67,6 @@ static void spi_init(void) {
     GPIO_Init(GPIOB, &GPIO_InitStruct);
 
     spi_set_speed(SD_SPEED_400KHZ);
-	/*GPIO_InitTypeDef gpio;
-
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1, ENABLE);
-
-	gpio.GPIO_Pin = GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7;
-	gpio.GPIO_Speed = GPIO_Speed_50MHz;
-	gpio.GPIO_Mode = GPIO_Mode_AF_PP;
-	GPIO_Init(GPIOA, &gpio);
-
-	gpio.GPIO_Pin = GPIO_Pin_4;
-	gpio.GPIO_Speed = GPIO_Speed_50MHz;
-	gpio.GPIO_Mode = GPIO_Mode_Out_PP;
-	GPIO_Init(GPIOA, &gpio);
-
-	spi_set_speed(SD_SPEED_400KHZ); */
 }
 #define spi_cs_low() do { GPIOB->BRR = GPIO_Pin_12; } while (0)
 #define spi_cs_high() do { GPIOB->BSRR = GPIO_Pin_12; } while (0)

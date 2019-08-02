@@ -103,24 +103,24 @@ void print_rtc_time_to_string(void) {
 */
 void sd_mkfile(void) {
 	static FATFS FatFs;
-    char logName[100], timestamp[32];;
-
-	// Initialization of LED pin
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB| RCC_APB2Periph_AFIO, ENABLE);
-	GPIO_InitTypeDef GPIO_InitStruct;
-	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_9;
-	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_Out_PP;
-	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_2MHz;
-	GPIO_Init(GPIOB, &GPIO_InitStruct);
+	FILINFO fno;
+	FRESULT fr;
+	int logNumber;
+    char logName[100];
 
 	// mount SD card
 	if (f_mount(&FatFs, "", 0) == FR_OK) printf("Mount success\n");
 	else printf("Mount failed\n");
 	// create log name and open file
-    sprintf(logName, "log.csv");
+	logNumber = 0;
+	do {
+		logNumber++;
+		sprintf(logName, "log_%d.txt", logNumber);
+		fr = f_stat(logName, &fno);
+	} while (fr == FR_OK);
+    sprintf(logName, "log_%d.txt", logNumber);
     if (f_open(&file, logName, FA_OPEN_ALWAYS | FA_WRITE) == FR_OK) {
     	printf("File opened\n");
-    	f_puts("Depth (m):, Pressure (mbar):\n", &file);
     }
     else printf("File failed\n");
 }
@@ -131,18 +131,10 @@ void sd_mkfile(void) {
 void sd_data(float depth, float pressure) {
     char buffer[100];
 
-	// Initialization of LED pin
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB| RCC_APB2Periph_AFIO, ENABLE);
-	GPIO_InitTypeDef GPIO_InitStruct;
-	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_9;
-	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_Out_PP;
-	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_2MHz;
-	GPIO_Init(GPIOB, &GPIO_InitStruct);
-
 	//go to the end of the file
     f_lseek(&file, file.fsize);
     //get data and generate string
-	sprintf(buffer, "%0.3f, %0.3f\n", depth, pressure);
+	sprintf(buffer, "Depth: %0.3fm Pressure: %0.3fmbar\n", depth, pressure);
     //write data to the file
     if (f_puts(buffer, &file) == FR_OK) printf("Write success\n");
     else printf("%d\n", f_puts(buffer, &file));

@@ -23,7 +23,7 @@
  /  writing functions, f_write(), f_sync(), f_unlink(), f_mkdir(), f_chmod(),
  /  f_rename(), f_truncate() and useless f_getfree(). */
 
-#define _FS_MINIMIZE	2	/* 0 to 3 */
+#define _FS_MINIMIZE	0	/* 0 to 3 */
 /* The _FS_MINIMIZE option defines minimization level to remove API functions.
  /
  /   0: All basic functions are enabled.
