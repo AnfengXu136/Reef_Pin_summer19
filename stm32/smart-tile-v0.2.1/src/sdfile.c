@@ -106,7 +106,7 @@ void sd_mkfile(void) {
 	FILINFO fno;
 	FRESULT fr;
 	int logNumber;
-    char logName[100];
+    char logName[100], logTitle[100];
 
 	// mount SD card
 	if (f_mount(&FatFs, "", 0) == FR_OK) printf("Mount success\n");
@@ -115,12 +115,14 @@ void sd_mkfile(void) {
 	logNumber = 0;
 	do {
 		logNumber++;
-		sprintf(logName, "log_%d.txt", logNumber);
+		sprintf(logName, "log_%d.csv", logNumber);
 		fr = f_stat(logName, &fno);
 	} while (fr == FR_OK);
-    sprintf(logName, "log_%d.txt", logNumber);
+    sprintf(logName, "log_%d.csv", logNumber);
     if (f_open(&file, logName, FA_OPEN_ALWAYS | FA_WRITE) == FR_OK) {
     	printf("File opened\n");
+    	sprintf(logTitle, "Depth(m):,Pressure(mbar):\n");
+    	f_puts(logTitle, &file);
     }
     else printf("File failed\n");
 }
@@ -134,10 +136,10 @@ void sd_data(float depth, float pressure) {
 	//go to the end of the file
     f_lseek(&file, file.fsize);
     //get data and generate string
-	sprintf(buffer, "Depth: %0.3fm Pressure: %0.3fmbar\n", depth, pressure);
+	sprintf(buffer, "%0.3f,%0.3f\n", depth, pressure);
     //write data to the file
-    if (f_puts(buffer, &file) == FR_OK) printf("Write success\n");
-    else printf("%d\n", f_puts(buffer, &file));
+    if (f_puts(buffer, &file) != -1) printf("Write success\n");
+    else printf("Write failed\n");
 }
 
 /* Purpose:
