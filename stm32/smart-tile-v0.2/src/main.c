@@ -123,29 +123,35 @@ int main(void)
 		// update data
 		if(!(cnt_100ms % PERIOD_LED)) Toggle_LED_Green();
 		if(!(cnt_100ms % PERIOD_DEPTH)) {
+printf("getting depth...\n");
       		ms5803_getDepthAndPressure(&depth, &pressure);
+printf("depth: %f\n", depth);
 			avedepth += depth;
 		}
 		//printf("%f\n", ADC1_ReadBattery());
-		battery += ADC1_ReadBattery();
+/*		battery += ADC1_ReadBattery();
 		if(!(cnt_100ms % PERIOD_BATT)){
 			battery /= PERIOD_BATT;
 			battery = ADC1_ReadBattery();
 		}
+*/
 		// transmit
 		if(!(cnt_100ms % PERIOD_PRINT_SENSOR)) printSensorData(pressure, depth, battery);
 		// display
 		if(cnt_100ms % PERIOD_EINK == PERIOD_EINK - 10) {
 			// 2s before display digits
 			// clear the screen to prevent from burning
+printf("clearing eink\n");
 			 Eink_Clear();
 		}
 		if(!(cnt_100ms % PERIOD_EINK)) {
+printf("updating e-ink\n");
+printf("pressure: %f, avedepth: %f\n", pressure, avedepth);
 			einkUserLogic(pressure, avedepth / (PERIOD_EINK / PERIOD_DEPTH), battery);
 			avedepth = 0;
 		}
 		// reset the battery
-		if(!(cnt_100ms % PERIOD_BATT)) battery = 0;
+//		if(!(cnt_100ms % PERIOD_BATT)) battery = 0;
 		// prevent overflow
 		if(!(cnt_100ms % PERIOD_OVERALL)) cnt_100ms = 0;
 

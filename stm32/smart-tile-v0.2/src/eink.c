@@ -345,6 +345,5 @@ void Eink_Clear(){
 	Eink_ClearFrameMemory(0xFF);
 	Eink_DisplayFrame();
 	Eink_Sleep();
-
 }
 
