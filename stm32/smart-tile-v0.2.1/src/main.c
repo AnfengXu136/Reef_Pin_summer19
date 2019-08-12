@@ -9,8 +9,10 @@
 #include "fonts.h"
 #include "rtc.h"
 #include "power.h"
-
+#include "ff.h"
 #include <math.h>
+
+#include "sdfile.h"
 
 // PA9:		Tx
 // PA10:	Rx
@@ -19,7 +21,6 @@
 extern int RECV_CNT;
 extern int dbg_line_flag;
 extern char dbg_line[];
-
 
 void deviceSetup() {
 	// wake up if pressed more than 2s
@@ -47,7 +48,9 @@ void deviceSetup() {
 	
 	// register standby functions for peripherals
 	// Register_Standby_Funcs(Eink_Standby);
+	Register_Standby_Funcs(sd_closefile); //NEW
 	Register_Standby_Funcs(Turn_Off_Sensor_Power);
+
 }
 
 void printSensorData(float pressure, float depth, float battery) {
@@ -92,7 +95,7 @@ void einkUserLogic(float pressure, float depth, float battery) {
 		ClearBuffer();
 		DrawStringAt(0, 10, "Smart Integrated Tile", &Font24, 0.8, 1, 1);
 		DrawStringAt(0, 50, "Version 0.2", &Font24, 0.8, 0.9, 1);
-		//DrawStringAt(0, 90, "12/06/2019", &Font24, 0.8, 0.9, 1);
+		DrawStringAt(0, 90, "12/06/2019", &Font24, 0.8, 0.9, 1);
 
 		// DrawStringAt(0, 70, line2, &Font24, 1, 1);
 		// sprintf(line, "Vbatt %.4fV", battery);
@@ -106,6 +109,8 @@ void einkUserLogic(float pressure, float depth, float battery) {
 
 int main(void)
 {
+	//FIL file;
+
 	// clock for tasks
 	int cnt_100ms = 0;
 	
@@ -113,47 +118,50 @@ int main(void)
 	float avedepth = 0;
 
 	// sensor data
-	float pressure = -1.11, depth =  1.23, battery = 0;
+	float pressure = -1.11, depth = -1.11, battery = 0;
 	
 	// initialization
 	deviceSetup();
+	sd_mkfile();
 
 	while (1)
 	{
 		// update data
 		if(!(cnt_100ms % PERIOD_LED)) Toggle_LED_Green();
 		if(!(cnt_100ms % PERIOD_DEPTH)) {
-printf("getting depth...\n");
-      		ms5803_getDepthAndPressure(&depth, &pressure);
-printf("depth: %f\n", depth);
+			ms5803_getDepthAndPressure(&depth, &pressure);
+			sd_data(depth, pressure);
 			avedepth += depth;
 		}
 		//printf("%f\n", ADC1_ReadBattery());
-/*		battery += ADC1_ReadBattery();
+		battery += ADC1_ReadBattery();
 		if(!(cnt_100ms % PERIOD_BATT)){
 			battery /= PERIOD_BATT;
 			battery = ADC1_ReadBattery();
 		}
-*/
 		// transmit
-		if(!(cnt_100ms % PERIOD_PRINT_SENSOR)) printSensorData(pressure, depth, battery);
+		if(!(cnt_100ms % PERIOD_PRINT_SENSOR)) {
+			printSensorData(pressure, depth, battery);;
+		}
 		// display
-		if(cnt_100ms % PERIOD_EINK == PERIOD_EINK - 10) {
+		if(cnt_100ms % PERIOD_EINK == PERIOD_EINK - 20) {
 			// 2s before display digits
 			// clear the screen to prevent from burning
-printf("clearing eink\n");
-			 Eink_Clear();
+			Eink_ClearFrameMemory(0xFF);
+			Eink_DisplayFrame();
 		}
 		if(!(cnt_100ms % PERIOD_EINK)) {
-printf("updating e-ink\n");
-printf("pressure: %f, avedepth: %f\n", pressure, avedepth);
 			einkUserLogic(pressure, avedepth / (PERIOD_EINK / PERIOD_DEPTH), battery);
 			avedepth = 0;
 		}
 		// reset the battery
-//		if(!(cnt_100ms % PERIOD_BATT)) battery = 0;
+		if(!(cnt_100ms % PERIOD_BATT)) {
+			battery = 0;
+		}
 		// prevent overflow
-		if(!(cnt_100ms % PERIOD_OVERALL)) cnt_100ms = 0;
+		if(!(cnt_100ms % PERIOD_OVERALL)) {
+			cnt_100ms = 0;
+		}
 
 		cnt_100ms++;
 		DelayMs(100);

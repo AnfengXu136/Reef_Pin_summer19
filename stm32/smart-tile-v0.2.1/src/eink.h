@@ -53,5 +53,4 @@ void Eink_WakeDisplaySleep(void);
 
 void Eink_demo(void);
 
-void Eink_Clear();
 #endif
