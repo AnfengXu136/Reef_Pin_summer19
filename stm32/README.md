@@ -15,13 +15,9 @@ IDE and Library - Our embedded software is fully dependant on STM32 Standard Per
 http://www.openstm32.org/System%2BWorkbench%2Bfor%2BSTM32
 You need to create an account for the download.
 
-
-Setting up the environment - after downloading SW4STM32 and cloning our repo, choose the version you want to open and open our project by clicking:
- 
-After opening the file, click “Run” and click again “Run Configuration.” This should open the following window. 
-
+Setting up the environment - after downloading SW4STM32 and cloning our repo, choose the version you want to open and open our project by clicking the cproject file. 
+After opening the file, click “Run” and click again “Run Configuration.” This should open a window. 
 Then, go to “debugger” and change Reset Mode to “Software System Reset.”
-
 Now, you should be able to code and upload your code.
 To compile, click “build” and to upload the code, click “run.”
 
