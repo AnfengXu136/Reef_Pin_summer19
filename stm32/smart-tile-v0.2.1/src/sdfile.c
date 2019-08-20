@@ -100,8 +100,9 @@ void print_rtc_time_to_string(void) {
  * names the file to be created
  * mounts SD card
  * opens file
+ * returns log number
 */
-void sd_mkfile(void) {
+int sd_mkfile(void) {
 	static FATFS FatFs;
 	FILINFO fno;
 	FRESULT fr;
@@ -125,12 +126,14 @@ void sd_mkfile(void) {
     	f_puts(logTitle, &file);
     }
     else printf("File failed\n");
+    return logNumber;
 }
 
 /* Purpose:
  * loads data from pressure sensor into opened file
+ * returns write error
 */
-void sd_data(float depth, float pressure) {
+int sd_data(float depth, float pressure) {
     char buffer[100];
 
 	//go to the end of the file
@@ -138,8 +141,14 @@ void sd_data(float depth, float pressure) {
     //get data and generate string
 	sprintf(buffer, "%0.3f,%0.3f\n", depth, pressure);
     //write data to the file
-    if (f_puts(buffer, &file) != -1) printf("Write success\n");
-    else printf("Write failed\n");
+    if (f_puts(buffer, &file) != -1) {
+    	printf("Write success\n");
+    	return 0;
+    }
+    else {
+    	printf("Write failed\n");
+    	return 1;
+    }
 }
 
 /* Purpose:

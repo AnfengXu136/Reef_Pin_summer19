@@ -71,7 +71,6 @@ void Eink_Display_Depth(float depth) {
 	ClearBuffer();
 	sprintf(depth_str, "%2d.%02d", dig, frac);
 	DrawStringAt(0, 25, depth_str, &Font24, 3.5, 4, 1);
-	Eink_WakeDisplaySleep();
 }
 
 void Eink_Display_Debug(float pressure, float depth, float battery) {
@@ -87,15 +86,17 @@ void Eink_Display_Debug(float pressure, float depth, float battery) {
 	Eink_SetAndDisplay();
 }
 
-void einkUserLogic(float pressure, float depth, float battery) {
+void einkUserLogic(float pressure, float depth, float battery, int logNumber, int error) {
 	static uint8_t welcome_flag = 1;
+	char logName[100];
+
 	if(welcome_flag) {
 		// char line[30];
 		welcome_flag = 0;
 		ClearBuffer();
 		DrawStringAt(0, 10, "Smart Integrated Tile", &Font24, 0.8, 1, 1);
-		DrawStringAt(0, 50, "Version 0.2", &Font24, 0.8, 0.9, 1);
-		DrawStringAt(0, 90, "12/06/2019", &Font24, 0.8, 0.9, 1);
+		DrawStringAt(0, 50, "Version 0.2.1", &Font24, 0.8, 0.9, 1);
+		DrawStringAt(0, 90, "08/20/2019", &Font24, 0.8, 0.9, 1);
 
 		// DrawStringAt(0, 70, line2, &Font24, 1, 1);
 		// sprintf(line, "Vbatt %.4fV", battery);
@@ -104,13 +105,20 @@ void einkUserLogic(float pressure, float depth, float battery) {
 	}
 	else {
 		Eink_Display_Depth(depth);
+		if (error) {
+			DrawStringAt(0, 5, "SD card error!", &Font24, 0.8, 1, 1);
+			Eink_WakeDisplaySleep();
+		}
+		else {
+			sprintf(logName, "Log #%d", logNumber);
+			DrawStringAt(0, 5, logName, &Font24, 0.8, 1, 1);
+			Eink_WakeDisplaySleep();
+		}
 	}
 }
 
 int main(void)
 {
-	//FIL file;
-
 	// clock for tasks
 	int cnt_100ms = 0;
 	
@@ -120,9 +128,12 @@ int main(void)
 	// sensor data
 	float pressure = -1.11, depth = -1.11, battery = 0;
 	
+	// SD card
+	int logNumber, error;
+
 	// initialization
 	deviceSetup();
-	sd_mkfile();
+	logNumber = sd_mkfile(); // gets file number to display
 
 	while (1)
 	{
@@ -130,7 +141,7 @@ int main(void)
 		if(!(cnt_100ms % PERIOD_LED)) Toggle_LED_Green();
 		if(!(cnt_100ms % PERIOD_DEPTH)) {
 			ms5803_getDepthAndPressure(&depth, &pressure);
-			sd_data(depth, pressure);
+			error = sd_data(depth, pressure); // checks if write error
 			avedepth += depth;
 		}
 		//printf("%f\n", ADC1_ReadBattery());
@@ -141,7 +152,7 @@ int main(void)
 		}
 		// transmit
 		if(!(cnt_100ms % PERIOD_PRINT_SENSOR)) {
-			printSensorData(pressure, depth, battery);;
+			printSensorData(pressure, depth, battery);
 		}
 		// display
 		if(cnt_100ms % PERIOD_EINK == PERIOD_EINK - 20) {
@@ -151,7 +162,7 @@ int main(void)
 			Eink_DisplayFrame();
 		}
 		if(!(cnt_100ms % PERIOD_EINK)) {
-			einkUserLogic(pressure, avedepth / (PERIOD_EINK / PERIOD_DEPTH), battery);
+			einkUserLogic(pressure, avedepth / (PERIOD_EINK / PERIOD_DEPTH), battery, logNumber, error);
 			avedepth = 0;
 		}
 		// reset the battery

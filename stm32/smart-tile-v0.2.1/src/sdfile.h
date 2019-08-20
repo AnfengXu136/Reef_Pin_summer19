@@ -10,6 +10,6 @@ FIL file;
 int make_integer(float num);
 float make_frac(float num, int integer);
 void print_rtc_time_to_string(void);
-void sd_mkfile(void);
-void sd_data(float depth, float pressure);
+int sd_mkfile(void);
+int sd_data(float depth, float pressure);
 void sd_closefile(void);
