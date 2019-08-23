@@ -34,4 +34,4 @@ GitHub repositories containing work done by the previous teams on this project c
 * [User Manual](https://docs.google.com/document/d/1ufcVEwToTL347TIJa8BTdMBOQnbh-Dc6tYHnt09aWhc/edit?usp=sharing)
 * [Final Report](https://docs.google.com/document/d/1GHIrqxifWv97SIiYkwtMFNrA6XIQ8vvvFCd0-GAbfDE/edit?usp=sharing)
 * [Technical Paper]()
-* [Final Presentation]()
+* [Final Presentation](https://docs.google.com/presentation/d/16IRXAvVATnhi6VliVaiazFm-Qb-JAyPtN_WVCFj1rOY/edit#slide=id.g3feb1946b7_17_0)
