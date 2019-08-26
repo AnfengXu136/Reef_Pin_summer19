@@ -35,3 +35,5 @@ GitHub repositories containing work done by the previous teams on this project c
 * [Final Report](https://docs.google.com/document/d/1GHIrqxifWv97SIiYkwtMFNrA6XIQ8vvvFCd0-GAbfDE/edit?usp=sharing)
 * [Technical Paper]()
 * [Final Presentation](https://docs.google.com/presentation/d/16IRXAvVATnhi6VliVaiazFm-Qb-JAyPtN_WVCFj1rOY/edit#slide=id.g3feb1946b7_17_0)
+* [Notes for next team](https://docs.google.com/document/d/1U75X6sHqDsNa_K2ptZNxjGdgGvhvemMbGUb-xTKog6w/edit)
+* [Next steps](https://docs.google.com/document/d/1MVm5gGPROugtsDwmIqsRltZwrWXT1dNbkipjWg4ARCg/edit)
