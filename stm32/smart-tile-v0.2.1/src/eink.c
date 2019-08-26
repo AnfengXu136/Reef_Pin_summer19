@@ -340,3 +340,10 @@ void Eink_WakeDisplaySleep(){
 	Eink_Sleep();
 }
 
+void Eink_Clear(){
+	Eink_Reset();
+	Eink_ClearFrameMemory(0xFF);
+	Eink_DisplayFrame();
+	Eink_Sleep();
+}
+

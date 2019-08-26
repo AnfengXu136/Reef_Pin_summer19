@@ -96,7 +96,7 @@ void einkUserLogic(float pressure, float depth, float battery, int logNumber, in
 		ClearBuffer();
 		DrawStringAt(0, 10, "Smart Integrated Tile", &Font24, 0.8, 1, 1);
 		DrawStringAt(0, 50, "Version 0.2.1", &Font24, 0.8, 0.9, 1);
-		DrawStringAt(0, 90, "08/20/2019", &Font24, 0.8, 0.9, 1);
+		//DrawStringAt(0, 90, "08/20/2019", &Font24, 0.8, 0.9, 1);
 
 		// DrawStringAt(0, 70, line2, &Font24, 1, 1);
 		// sprintf(line, "Vbatt %.4fV", battery);
@@ -155,11 +155,10 @@ int main(void)
 			printSensorData(pressure, depth, battery);
 		}
 		// display
-		if(cnt_100ms % PERIOD_EINK == PERIOD_EINK - 20) {
+		if(cnt_100ms % PERIOD_EINK == PERIOD_EINK - 10) {
 			// 2s before display digits
 			// clear the screen to prevent from burning
-			Eink_ClearFrameMemory(0xFF);
-			Eink_DisplayFrame();
+			Eink_Clear();
 		}
 		if(!(cnt_100ms % PERIOD_EINK)) {
 			einkUserLogic(pressure, avedepth / (PERIOD_EINK / PERIOD_DEPTH), battery, logNumber, error);
