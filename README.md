@@ -25,7 +25,7 @@ GitHub repositories containing work done by the previous teams on this project c
 
 
 ## Team Members (Summer 2019 Engineers for Exploration)
-* Alex Xu - UC San Diego
+* Anfeng Xu - UC San Diego
 * Brian Sebastian - UC San Diego
 * Charmaine Beluso - Mississippi State University
 * Eamon Patamasing - UC San Diego
